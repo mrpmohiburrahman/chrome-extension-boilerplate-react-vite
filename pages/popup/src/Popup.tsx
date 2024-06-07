@@ -1,33 +1,24 @@
+// src/Popup.tsx
+import React from 'react';
 import '@src/Popup.css';
 import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
 import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
-
-import { ComponentPropsWithoutRef } from 'react';
+import DataList from './DataList';
 
 const Popup = () => {
   const theme = useStorageSuspense(exampleThemeStorage);
 
   return (
     <div
-      className="App"
+      className="App p-4"
       style={{
         backgroundColor: theme === 'light' ? '#eee' : '#222',
+        color: theme === 'light' ? '#222' : '#eee',
       }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#222' : '#eee' }}>
+      <header className="App-header">
         <img src={chrome.runtime.getURL('newtab/logo.svg')} className="App-logo" alt="logo" />
-
-        <p>
-          Edit <code>pages/popup/src/Popup.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' ? '#0281dc' : undefined, marginBottom: '10px' }}>
-          Learn React!
-        </a>
-        <ToggleButton>Toggle theme</ToggleButton>
+        <h1 className="text-xl mb-4">Library Names</h1>
+        <DataList />
       </header>
     </div>
   );

@@ -1,9 +1,36 @@
-import '@src/SidePanel.css';
+// src/SidePanel.tsx
 import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
+import React, { useEffect, useState } from 'react';
+import '@src/SidePanel.css';
 import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
-import { ComponentPropsWithoutRef } from 'react';
 
-const SidePanel = () => {
+const DataList: React.FC = () => {
+  const [data, setData] = useState<{ [key: string]: any }>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    chrome.storage.local.get(['categoryData'], result => {
+      setData(result.categoryData || {});
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <ul className="space-y-2">
+      {Object.keys(data).map(key => (
+        <li key={key} className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
+          {key}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const SidePanel: React.FC = () => {
   const theme = useStorageSuspense(exampleThemeStorage);
 
   return (
@@ -11,40 +38,14 @@ const SidePanel = () => {
       className="App"
       style={{
         backgroundColor: theme === 'light' ? '#eee' : '#222',
+        color: theme === 'light' ? '#222' : '#eee',
       }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#222' : '#eee' }}>
+      <header className="App-header">
         <img src={chrome.runtime.getURL('sidepanel/logo.svg')} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>pages/sidepanel/src/SidePanel.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' ? '#0281dc' : undefined, marginBottom: '10px' }}>
-          Learn React
-        </a>
-        <h6>The color of this paragraph is defined using SASS.</h6>
-        <ToggleButton>Toggle theme</ToggleButton>
+        <h1 className="text-xl mb-4">Library Names</h1>
+        <DataList />
       </header>
     </div>
-  );
-};
-
-const ToggleButton = (props: ComponentPropsWithoutRef<'button'>) => {
-  const theme = useStorageSuspense(exampleThemeStorage);
-  return (
-    <button
-      className={
-        props.className +
-        ' ' +
-        'font-bold mt-4 py-1 px-4 rounded shadow hover:scale-105 ' +
-        (theme === 'light' ? 'bg-white text-black' : 'bg-black text-white')
-      }
-      onClick={exampleThemeStorage.toggle}>
-      {props.children}
-    </button>
   );
 };
 
