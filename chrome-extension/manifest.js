@@ -35,27 +35,27 @@ const manifest = Object.assign(
       default_popup: 'popup/index.html',
       default_icon: 'icon-34.png',
     },
-    chrome_url_overrides: {
-      newtab: 'newtab/index.html',
-    },
+    // chrome_url_overrides: {
+    //   newtab: 'newtab/index.html', // change the default screen on new tab
+    // },
     icons: {
       128: 'icon-128.png',
     },
-    content_scripts: [
-      {
-        matches: ['http://*/*', 'https://*/*', '<all_urls>'],
-        js: ['content/index.iife.js'],
-      },
-      {
-        matches: ['http://*/*', 'https://*/*', '<all_urls>'],
-        js: ['content-ui/index.iife.js'],
-      },
-      {
-        matches: ['http://*/*', 'https://*/*', '<all_urls>'],
-        css: ['content.css'], // public folder
-      },
-    ],
-    devtools_page: 'devtools/index.html',
+    // content_scripts: [ // injects script on web pages
+    //   {
+    //     matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+    //     js: ['content/index.iife.js'],
+    //   },
+    //   {
+    //     matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+    //     js: ['content-ui/index.iife.js'],
+    //   },
+    //   {
+    //     matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+    //     css: ['content.css'], // public folder
+    //   },
+    // ],
+    // devtools_page: 'devtools/index.html',
     web_accessible_resources: [
       {
         resources: ['*.js', '*.css', '*.svg', 'icon-128.png', 'icon-34.png'],
