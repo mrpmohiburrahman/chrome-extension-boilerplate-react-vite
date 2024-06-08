@@ -29,25 +29,25 @@ const MatchedItemsList: React.FC = () => {
   return (
     <div className="item-list">
       {items.map((item, index) => (
-        <div key={index} className="item-card">
-          <div className="item-header">
-            <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" className="item-link">
-              {item.npmPkg || 'No NPM Package'}
-            </a>
-            {item.goldstar && <span className="gold-star">Recommended</span>}
+        <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" key={index}>
+          <div className="item-card">
+            <div className="item-header">
+              <span className="item-link">{item.npmPkg || 'No NPM Package'}</span>
+              {item.goldstar && <span className="gold-star">Recommended</span>}
+            </div>
+            <div className="item-body">
+              {item.matchingScoreModifiers && item.matchingScoreModifiers.length > 0 && (
+                <div className="tags">
+                  {item.matchingScoreModifiers.map((tag, index) => (
+                    <span key={index} className="tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="item-body">
-            {item.matchingScoreModifiers && item.matchingScoreModifiers.length > 0 && (
-              <div className="tags">
-                {item.matchingScoreModifiers.map((tag, index) => (
-                  <span key={index} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        </a>
       ))}
     </div>
   );
