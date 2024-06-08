@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import '@src/SidePanel.css';
 import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
 
-const DataList: React.FC = () => {
-  const [data, setData] = useState<{ [key: string]: any }>({});
+const MatchedItemsList: React.FC = () => {
+  const [items, setItems] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    chrome.storage.local.get(['categoryData'], result => {
-      setData(result.categoryData || {});
+    chrome.storage.local.get(['matchedItems'], result => {
+      setItems(result.matchedItems || []);
       setLoading(false);
     });
   }, []);
@@ -19,11 +19,17 @@ const DataList: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  if (items.length === 0) {
+    return <div>No matched items found.</div>;
+  }
+
   return (
     <ul className="space-y-2">
-      {Object.keys(data).map(key => (
-        <li key={key} className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
-          {key}
+      {items.map((item, index) => (
+        <li key={index} className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
+          <a href={item} target="_blank" rel="noopener noreferrer">
+            {item}
+          </a>
         </li>
       ))}
     </ul>
@@ -35,18 +41,18 @@ const SidePanel: React.FC = () => {
 
   return (
     <div
-      className="App"
+      className="App p-4"
       style={{
         backgroundColor: theme === 'light' ? '#eee' : '#222',
         color: theme === 'light' ? '#222' : '#eee',
       }}>
-      <header className="App-header">
+      {/* <header className="App-header mb-4">
         <img src={chrome.runtime.getURL('sidepanel/logo.svg')} className="App-logo" alt="logo" />
-        <h1 className="text-xl mb-4">Library Names</h1>
-        <DataList />
-      </header>
+        <h1 className="text-xl">Matched Libraries</h1>
+      </header> */}
+      <MatchedItemsList />
     </div>
   );
 };
 
-export default withErrorBoundary(withSuspense(SidePanel, <div> Loading ... </div>), <div> Error Occur </div>);
+export default withErrorBoundary(withSuspense(SidePanel, <div>Loading...</div>), <div>Error Occurred</div>);
