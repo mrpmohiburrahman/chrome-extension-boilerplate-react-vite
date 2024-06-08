@@ -33,7 +33,7 @@ const manifest = Object.assign(
     },
     action: {
       default_popup: 'popup/index.html',
-      default_icon: 'icon-34.png',
+      default_icon: 'icon-32.png',
     },
     // chrome_url_overrides: {
     //   newtab: 'newtab/index.html', // change the default screen on new tab
