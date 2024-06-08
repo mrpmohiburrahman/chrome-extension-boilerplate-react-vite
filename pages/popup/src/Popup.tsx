@@ -1,15 +1,16 @@
 // src/popup.tsx
 import React, { useEffect, useState } from 'react';
 import '@src/Popup.css';
+import { Library } from './types';
 
 const MatchedItemsList: React.FC = () => {
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<Library[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       if (tabs[0].id !== undefined) {
-        chrome.runtime.sendMessage({ type: 'getMatchedItems', tabId: tabs[0].id }, response => {
+        chrome.runtime.sendMessage({ type: 'getMatchedItems', tabId: tabs[0].id }, (response: Library[]) => {
           setItems(response || []);
           setLoading(false);
         });
@@ -18,23 +19,37 @@ const MatchedItemsList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (items.length === 0) {
-    return <div>No matched items found.</div>;
+    return <div className="no-items">No matched items found.</div>;
   }
 
   return (
-    <ul className="space-y-2">
+    <div className="item-list">
       {items.map((item, index) => (
-        <li key={index} className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
-          <a href={item} target="_blank" rel="noopener noreferrer">
-            {item}
-          </a>
-        </li>
+        <div key={index} className="item-card">
+          <div className="item-header">
+            <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" className="item-link">
+              {item.npmPkg || 'No NPM Package'}
+            </a>
+            {item.goldstar && <span className="gold-star">Recommended</span>}
+          </div>
+          <div className="item-body">
+            {item.matchingScoreModifiers && item.matchingScoreModifiers.length > 0 && (
+              <div className="tags">
+                {item.matchingScoreModifiers.map((tag, index) => (
+                  <span key={index} className="tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 

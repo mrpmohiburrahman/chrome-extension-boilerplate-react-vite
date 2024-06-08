@@ -63,17 +63,19 @@ function updateBadgeAndStorage(
 
     if (uniqueCategory) {
       // Check if uniqueCategory matches any key in uniqueCategoryData
-      const matchedItems = uniqueCategoryData[uniqueCategory];
-      if (matchedItems) {
-        const itemCount = matchedItems.length;
+      const matchedUrls = uniqueCategoryData[uniqueCategory];
+      if (matchedUrls) {
+        const matchedItems = matchedUrls
+          .map(url => Object.values(combinedData).find(lib => lib.githubUrl === url))
+          .filter((item): item is Library => item !== undefined);
 
         // Set badge text
-        chrome.action.setBadgeText({ text: itemCount.toString(), tabId: tabId });
+        chrome.action.setBadgeText({ text: matchedItems.length.toString(), tabId: tabId });
 
         // Store matched items for this tab
         chrome.storage.local.set({ [`matchedItems_${tabId}`]: matchedItems });
 
-        console.log(`Found ${itemCount} items for uniqueCategory: ${uniqueCategory}`);
+        console.log(`Found ${matchedItems.length} items for uniqueCategory: ${uniqueCategory}`);
       } else {
         console.log(`No items found for uniqueCategory: ${uniqueCategory}`);
         chrome.action.setBadgeText({ text: '', tabId: tabId });
