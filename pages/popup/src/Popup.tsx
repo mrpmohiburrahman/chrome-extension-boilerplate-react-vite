@@ -1,43 +1,34 @@
-// src/Popup.tsx
-import React from 'react';
+// src/popup.tsx
+import React, { useEffect, useState } from 'react';
 import '@src/Popup.css';
-import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
-import DataList from './DataList';
 
-const Popup = () => {
-  const theme = useStorageSuspense(exampleThemeStorage);
+const MatchedItemsList: React.FC = () => {
+  const [items, setItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    chrome.storage.local.get(['matchedItems'], result => {
+      setItems(result.matchedItems || []);
+    });
+  }, []);
 
   return (
-    <div
-      className="App p-4"
-      style={{
-        backgroundColor: theme === 'light' ? '#eee' : '#222',
-        color: theme === 'light' ? '#222' : '#eee',
-      }}>
-      <header className="App-header">
-        <img src={chrome.runtime.getURL('newtab/logo.svg')} className="App-logo" alt="logo" />
-        <h1 className="text-xl mb-4">Library Names</h1>
-        <DataList />
-      </header>
-    </div>
+    <ul className="space-y-2">
+      {items.map((item, index) => (
+        <li key={index} className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md">
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 };
 
-const ToggleButton = (props: ComponentPropsWithoutRef<'button'>) => {
-  const theme = useStorageSuspense(exampleThemeStorage);
-  return (
-    <button
-      className={
-        props.className +
-        ' ' +
-        'font-bold mt-4 py-1 px-4 rounded shadow hover:scale-105 ' +
-        (theme === 'light' ? 'bg-white text-black' : 'bg-black text-white')
-      }
-      onClick={exampleThemeStorage.toggle}>
-      {props.children}
-    </button>
-  );
-};
+const Popup: React.FC = () => (
+  <div className="App">
+    <header className="App-header">
+      <h1 className="text-xl mb-4">Matched Items</h1>
+      <MatchedItemsList />
+    </header>
+  </div>
+);
 
-export default withErrorBoundary(withSuspense(Popup, <div> Loading ... </div>), <div> Error Occur </div>);
+export default Popup;
