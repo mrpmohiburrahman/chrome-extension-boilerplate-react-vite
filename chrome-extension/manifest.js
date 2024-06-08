@@ -25,7 +25,7 @@ const manifest = Object.assign(
     name: '__MSG_extensionName__',
     version: packageJson.version,
     description: '__MSG_extensionDescription__',
-    permissions: ['storage', 'tabs', 'activeTab'].concat(sidePanelConfig.permissions),
+    permissions: ['storage', 'tabs', 'activeTab'], //.concat(sidePanelConfig.permissions),
     options_page: 'options/index.html',
     background: {
       service_worker: 'background.iife.js',
@@ -63,7 +63,7 @@ const manifest = Object.assign(
       },
     ],
   },
-  !isFirefox && { side_panel: { ...sidePanelConfig.side_panel } },
+  // !isFirefox && { side_panel: { ...sidePanelConfig.side_panel } },
 );
 
 export default manifest;
