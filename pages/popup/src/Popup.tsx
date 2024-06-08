@@ -29,10 +29,10 @@ const MatchedItemsList: React.FC = () => {
   return (
     <div className="item-list">
       {items.map((item, index) => (
-        <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" key={index}>
+        <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" key={index} className="item-link">
           <div className="item-card">
             <div className="item-header">
-              <span className="item-link">{item.npmPkg || 'No NPM Package'}</span>
+              <span className="npm-pkg">{item.npmPkg || 'No NPM Package'}</span>
               {item.goldstar && <span className="gold-star">Recommended</span>}
             </div>
             <div className="item-body">
