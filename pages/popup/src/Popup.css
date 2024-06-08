@@ -1,7 +1,4 @@
 /* src/Popup.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 body {
   margin: 0;
@@ -31,6 +28,7 @@ body {
   /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   /* Subtle shadow */
+  position: relative;
 }
 
 .App-header {
@@ -40,10 +38,54 @@ body {
   /* Accent color for the header text */
 }
 
+.header-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  /* background: #444444; */
+  /* Container background */
+  border: 1px solid #555555;
+  /* Border color */
+  border-radius: 8px;
+  margin-bottom: 20px;
+  /* Additional margin to separate from list */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* Shadow to match item cards */
+}
+
 .text-xl {
   font-size: 1.5rem;
   color: #ffcc00;
   /* Accent color */
+}
+
+.open-all-button {
+  padding: 8px 12px;
+  background-color: #ffcc00;
+  /* Button background color */
+  color: #333333;
+  /* Button text color */
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Button shadow */
+}
+
+.open-all-button:hover {
+  background-color: #e6b800;
+  /* Darker yellow on hover */
+  transform: translateY(-2px);
+}
+
+.open-all-button:active {
+  background-color: #d1a700;
+  /* Even darker yellow on active */
 }
 
 .item-list {
@@ -51,9 +93,7 @@ body {
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
-  padding-right: 10px;
-  padding-top: 10px;
-  /* Adjust for scrollbar */
+  /* padding-right: 10px; */
 }
 
 .item-link {

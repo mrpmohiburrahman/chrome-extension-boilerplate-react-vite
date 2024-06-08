@@ -18,6 +18,14 @@ const MatchedItemsList: React.FC = () => {
     });
   }, []);
 
+  const openAllLinks = () => {
+    items.forEach(item => {
+      if (item.githubUrl) {
+        chrome.tabs.create({ url: item.githubUrl });
+      }
+    });
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -27,36 +35,43 @@ const MatchedItemsList: React.FC = () => {
   }
 
   return (
-    <div className="item-list">
-      {items.map((item, index) => (
-        <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" key={index} className="item-link">
-          <div className="item-card">
-            <div className="item-header">
-              <span className="npm-pkg">{item.npmPkg || 'No NPM Package'}</span>
-              {item.goldstar && <span className="gold-star">Recommended</span>}
+    <>
+      <div className="header-button-container">
+        <h1 className="text-xl">Matched Libraries</h1>
+        <button className="open-all-button" onClick={openAllLinks}>
+          Open All Links
+        </button>
+      </div>
+      <div className="item-list">
+        {items.map((item, index) => (
+          <a href={item.githubUrl} target="_blank" rel="noopener noreferrer" key={index} className="item-link">
+            <div className="item-card">
+              <div className="item-header">
+                <span className="npm-pkg">{item.npmPkg || 'No NPM Package'}</span>
+                {item.goldstar && <span className="gold-star">Recommended</span>}
+              </div>
+              <div className="item-body">
+                {item.matchingScoreModifiers && item.matchingScoreModifiers.length > 0 && (
+                  <div className="tags">
+                    {item.matchingScoreModifiers.map((tag, index) => (
+                      <span key={index} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="item-body">
-              {item.matchingScoreModifiers && item.matchingScoreModifiers.length > 0 && (
-                <div className="tags">
-                  {item.matchingScoreModifiers.map((tag, index) => (
-                    <span key={index} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </a>
-      ))}
-    </div>
+          </a>
+        ))}
+      </div>
+    </>
   );
 };
 
 const Popup: React.FC = () => (
   <div className="App">
     <header className="App-header">
-      <h1 className="text-xl mb-4">Matched Libraries</h1>
       <MatchedItemsList />
     </header>
   </div>
