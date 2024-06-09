@@ -18,11 +18,13 @@ jobs:
         with:
           node-version: 'latest'
 
-      # - name: Install dependencies
-      #   run: pnpm install
+      
       - name: install pnpm
         uses: pnpm/action-setup@v4
 
+      - name: Install dependencies
+        run: pnpm install
+        
       - name: Build
         run: |
           # Create the dist folder by building the extension
