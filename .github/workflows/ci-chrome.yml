@@ -18,8 +18,7 @@ jobs:
         with:
           node-version: 'latest'
 
-      
-      - name: install pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
 
       - name: Install dependencies
@@ -31,10 +30,13 @@ jobs:
           pnpm build
 
       - name: Archive chrome-extension artifact
-        uses: actions/upload-artifact@v4
+        run: |
+          zip -r chrome-extension-${{ github.sha }}.zip dist
 
+      - name: Upload chrome-extension artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: chrome-extension-${{ github.sha }}
+          name: chrome-extension
           path: chrome-extension-${{ github.sha }}.zip
 
   upload-extension:
@@ -52,7 +54,7 @@ jobs:
       - name: Download bundle artifact
         uses: actions/download-artifact@v4
         with:
-          name: chrome-extension-${{ github.sha }}
+          name: chrome-extension
 
       - name: Install webstore CLI
         run: |
