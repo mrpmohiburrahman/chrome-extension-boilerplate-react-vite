@@ -3,7 +3,7 @@ name: Update Chrome Extension
 on:
   push:
     branches:
-      - main
+      - mrp/temp
 
 jobs:
   build-chrome-extension:
